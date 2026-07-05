@@ -1,7 +1,8 @@
 import userModel from "../models/user.model"
 import bcrypt from 'bcryptjs'
+import genToken from "../utils/token";
 
-const signUp = async(req,res)=>{
+export const signUp = async(req,res)=>{
     try {
         const {fullName,email,password,mobile,role} = req.body
         const isUseralreadyexist = await userModel.findOne({email});
@@ -32,8 +33,70 @@ const signUp = async(req,res)=>{
         role
        })
 
+       const token = await genToken(user._id);
+       res.cookie("token",token,{
+        secure:false,
+        sameSite:"strict",
+        maxAge:2*24*60*60*1000,
+        httpOnly:true
+       })
+
+       return res.status(201).json({
+        message:"User created successfully"
+       })
+
 
     } catch (error) {
         console.log("error in signupcontroller",error)
     }
+}
+
+//Login controller
+
+export const signIn = async(req,res) => {
+    try {
+        const {email,password} = req.body
+        const user = await userModel.findOne({email})
+        if(!user){
+            return res.status(400).json({
+                message:"User doesn't exist"
+            })
+        }
+        const isMatch = await bcrypt.compare(password,user.password);
+        if(!isMatch){
+            return res.status(400).json({
+                message:"Invalid credentials"
+            })
+        }
+
+      const token = await genToken(user._id);
+       res.cookie("token",token,{
+        secure:false,
+        sameSite:"strict",
+        maxAge:2*24*60*60*1000,
+        httpOnly:true
+       })
+
+       return res.status(200).json({
+        message:"User login successfully"
+       })
+
+
+        
+
+    } catch (error) {
+        console.log("error in login Controller",error)
+    }
+}
+
+//Logout controller
+export const signOut = async(req,res)=>{
+   try {
+      res.clearCookie("token")
+      return res.status(200).json({
+        message:"Logout successfully"
+      })
+   } catch (error) {
+     console.log("Error in logout controller",error)
+   }
 }
