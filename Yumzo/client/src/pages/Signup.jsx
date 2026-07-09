@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import signupimg from "../assets/signup.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const primaryColor = "#ff4d2d";
   const bgColor = "#fff9f6";
+  const navigate = useNavigate()
 
   const [role, setRole] = useState("user");
 
@@ -109,7 +111,7 @@ const Signup = () => {
                     key={r}
                     type="button"
                     onClick={() => setRole(r)}
-                    className={`rounded-lg py-2 border transition-all capitalize
+                    className={`rounded-lg cursor-pointer py-2 border transition-all capitalize
                     ${
                       role === r
                         ? "bg-orange-500 text-white border-orange-500"
@@ -126,7 +128,7 @@ const Signup = () => {
             {/* Button */}
 
             <button
-              className="w-full py-3 rounded-lg text-white font-semibold hover:opacity-90 transition"
+              className="w-full  py-3 rounded-lg text-white font-semibold hover:opacity-90 transition"
               style={{ backgroundColor: primaryColor }}
             >
               Sign Up
@@ -135,8 +137,9 @@ const Signup = () => {
             <p className="text-center mt-5 text-gray-500">
               Already have an account?
               <span
-                className="ml-2 font-semibold cursor-pointer"
+                className="ml-2 font-semibold cursor-pointer "
                 style={{ color: primaryColor }}
+                onClick={()=> navigate("/signin")}
               >
                 Login
               </span>
