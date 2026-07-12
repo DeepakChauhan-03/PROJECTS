@@ -4,6 +4,8 @@ import Signup from './pages/Signup'
 import Signin from './pages/Signin'
 import PageNotFound from './pages/PageNotFound'
 
+export const serverUrl = "http://localhost:8000"
+
 const App = () => {
   return (
     <div>
