@@ -5,21 +5,22 @@ import genToken from "../utils/token.js";
 export const signUp = async(req,res)=>{
     try {
         const {fullName,email,password,mobile,role} = req.body
-        const isUseralreadyexist = await userModel.findOne({email});
+
+        let isUseralreadyexist = await userModel.findOne({email});
         if(isUseralreadyexist){
             return res.status(400).json({
                 message:"User already exist"
             })
         }
-       if(password.length<6){
+       if(password.length<5){
         return res.status(400).json({
             message:"Password must be atleast 6 character"
         })
        }
 
-       if(mobile.length<10){
+       if(mobile.length !== 10){
          return res.status(400).json({
-            message:"Mobile number should be atleast 10 "
+            message:"Mobile number should be atleast 10 digit"
         })
        }
 
@@ -64,7 +65,7 @@ export const signIn = async(req,res) => {
         }
         const isMatch = await bcrypt.compare(password,user.password);
         if(!isMatch){
-            return res.status(400).json({
+            return res.status(404).json({
                 message:"Invalid credentials"
             })
         }

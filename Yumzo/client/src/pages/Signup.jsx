@@ -69,7 +69,7 @@ const Signup = () => {
 
               <input
                 type="text"
-                onChange={(e)=>setFullname(e.target.fullname)}
+                onChange={(e)=>setFullname(e.target.value)}
                 value={fullName}
                 placeholder="Enter your name"
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:border-orange-500"
@@ -108,7 +108,7 @@ const Signup = () => {
 
               <input
                 type="password"
-                onChange={(e)=>setPassword(e.target.password)}
+                onChange={(e)=>setPassword(e.target.value)}
                 value={password}
                 placeholder="Enter password"
                 className="w-full border rounded-lg px-4 py-3 outline-none focus:border-orange-500"
