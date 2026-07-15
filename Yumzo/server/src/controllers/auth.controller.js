@@ -101,3 +101,5 @@ export const signOut = async(req,res)=>{
      console.log("Error in logout controller",error)
    }
 }
+
+//otp on email
