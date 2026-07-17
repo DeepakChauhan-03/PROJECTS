@@ -1,6 +1,7 @@
 import userModel from "../models/user.model.js"
 import bcrypt from 'bcryptjs'
 import genToken from "../utils/token.js";
+import { sendOtpMail } from "../utils/mail.js";
 
 export const signUp = async(req,res)=>{
     try {
@@ -103,3 +104,77 @@ export const signOut = async(req,res)=>{
 }
 
 //otp on email
+
+export const sendOtp = async (req,res)=>{
+    try {
+        const {email} = req.body
+        const user = await userModel.findOne({email})
+        if(!user){
+            return res.status(400).json({
+                message:"User does not exist"
+            })
+        }
+     //generate otp
+     const otp = Math.floor(1000+ Math.random() * 9000).toString()
+     user.resetOtp = otp;
+     user.otpExpires = Date.now()+5*60*1000  //5 minute
+     user.isOtpVerified = false
+     await user.save();
+
+     sendOtpMail(email,otp) //nodemailer function
+
+     return res.status(200).json({
+        message:"OTP sent successfully"
+     })
+
+
+    } catch (error) {
+        console.log("Error in top controller",error)
+    }
+}
+
+//verify OTP
+export const verifyOtp = async (req,res)=>{
+    try {
+        const {email,otp} = req.body;
+        const user = await userModel.findOne({email})
+        if(!user || user.resetOtp!=otp || user.otpExpires<Date.now()){
+            return res.status(400).json({
+                message:"Inavlid otp"
+            })
+        }
+        user.isOtpVerified = true;
+        user.resetOtp = undefined;
+        user.otpExpires = undefined;
+        await user.save();
+        return res.status(200).json({
+            message:"OTP verified successfully"
+        })
+        
+    } catch (error) {
+        console.log("Error in verifyotp controller",error)
+    }
+}
+
+export const resetPassword = async (req,res)=>{
+    try {
+        const {email,newPassword} = req.body;
+          const user = await userModel.findOne({email})
+        if(!user || !user.isOtpVerified){
+            return res.status(400).json({
+                message:"OTP verification is required"
+            })
+        }
+        const hashedPassword = await bcrypt.hash(password,10);
+        user.password = hashedPassword;
+        user.isOtpVerified = false;
+        await user.save();
+        return res.status(200).json({
+            message:"Password reset successfully"
+        })
+
+
+    } catch (error) {
+        console.log("Error in resetPassword Controller",error)
+    }
+}

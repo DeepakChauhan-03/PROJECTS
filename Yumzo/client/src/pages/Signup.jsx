@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import axios from 'axios'
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const Signup = () => {
   const primaryColor = "#ff4d2d";
@@ -32,6 +34,12 @@ const Signup = () => {
     }
   }
 
+  //googleAuth
+  const handleGoogleAuth = async ()=>{
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth,provider)
+      console.log(result)
+  }
 
   return (
     <div className="min-h-screen w-full" style={{ backgroundColor: bgColor }}>
@@ -151,6 +159,7 @@ const Signup = () => {
             {/* Google Signup */}
             <button
               type="button"
+              onClick={handleGoogleAuth}
               className="w-full flex items-center justify-center gap-3 border border-gray-300 
               rounded-lg py-3 font-medium hover:bg-gray-100 transition cursor-pointer my-3"
             >

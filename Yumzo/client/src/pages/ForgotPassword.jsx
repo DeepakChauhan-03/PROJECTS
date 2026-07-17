@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import {IoIosArrowRoundBack} from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
+import { serverUrl } from "../App";
 
 const ForgotPassword = () => {
   const navigate = useNavigate()
@@ -10,6 +11,44 @@ const ForgotPassword = () => {
   const [otp,setOtp] = useState("")
   const [newPassword,setNewPassword] = useState("")
   const [confirmPassword,setConfirmPassword] = useState("")
+
+  const handleSendOtp = async()=>{
+    try {
+      const result = await axios.post(`${ServerUrl}/api/auth/send-otp`,{email},
+        {withCredetials:true}
+      )
+      console.log(result)
+      setStep(2)
+    } catch (error) {
+      console.log("Error in handleotp",error)
+    }
+  }
+
+   const handleVerifyOtp = async()=>{
+    try {
+      const result = await axios.post(`${ServerUrl}/api/auth/verify-otp`,{email,otp},
+        {withCredetials:true}
+      )
+      console.log(result)
+      setStep(3)
+    } catch (error) {
+      console.log("Error in Verifyotp",error)
+    }
+  } 
+
+   const handleResetPassword = async()=>{
+    if(newPassword!=confirmPassword) return null
+    try {
+      const result = await axios.post(`${ServerUrl}/api/auth/reset-password`,{email,newPassword},
+        {withCredetials:true}
+      )
+      console.log(result)
+      navigate("/signin")
+    } catch (error) {
+      console.log("Error in ResetPassword",error)
+    }
+  }
+
   return (
     <div className='flex w-full items-center justify-center min-h-screen p-4
     bg-[#fff9f6]'>
@@ -39,7 +78,7 @@ const ForgotPassword = () => {
               />
                {/* Sign Up Button */}
             <button
-            //  onClick={handleSignUp}
+             onClick={handleSendOtp}
               className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
               
             >
@@ -69,7 +108,7 @@ const ForgotPassword = () => {
               />
                {/* Button */}
             <button
-            //  onClick={handleSignUp}
+             onClick={handleVerifyOtp}
               className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
             >
               Verify OTP
@@ -105,7 +144,7 @@ const ForgotPassword = () => {
               />
                {/*  Button */}
             <button
-            //  onClick={handleSignUp}
+             onClick={handleResetPassword}
               className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
             >
               Reset Password
