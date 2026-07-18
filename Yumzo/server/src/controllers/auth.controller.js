@@ -156,6 +156,7 @@ export const verifyOtp = async (req,res)=>{
     }
 }
 
+//Password Reset
 export const resetPassword = async (req,res)=>{
     try {
         const {email,newPassword} = req.body;
@@ -177,4 +178,37 @@ export const resetPassword = async (req,res)=>{
     } catch (error) {
         console.log("Error in resetPassword Controller",error)
     }
+}
+
+//Google Auth controller
+export const googleAuth = async (req,res)=>{
+   try {
+     const {fullName,email,mobile,role} = req.body;
+     let user = await userModel.findOne({email})
+     if(!user){
+        user = await userModel.create({
+            fullName,
+            email,
+            mobile,
+            role
+        })
+     }
+
+     const token = await genToken(user._id);
+       res.cookie("token",token,{
+        secure:false,
+        sameSite:"strict",
+        maxAge:2*24*60*60*1000,
+        httpOnly:true
+       })
+
+       return res.status(200).json({
+        message:"User login successfully",
+        user
+       })
+
+
+   } catch (error) {
+    console.log("Error in googleAuth Controller",error)
+   }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {IoIosArrowRoundBack} from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 import { serverUrl } from "../App";
+import {ClipLoader} from 'react-spinners'
 
 const ForgotPassword = () => {
   const navigate = useNavigate()
@@ -12,40 +13,59 @@ const ForgotPassword = () => {
   const [newPassword,setNewPassword] = useState("")
   const [confirmPassword,setConfirmPassword] = useState("")
 
+  const [err,setErr] = useState('')
+  const [loading,setLoading] = useState(false)
+
   const handleSendOtp = async()=>{
+    setLoading(true)
     try {
       const result = await axios.post(`${ServerUrl}/api/auth/send-otp`,{email},
         {withCredetials:true}
       )
       console.log(result)
+      setErr('')
       setStep(2)
+      setLoading(false)
     } catch (error) {
       console.log("Error in handleotp",error)
+      setErr(error?.response?.data?.message)
+      setLoading(false)
     }
   }
 
    const handleVerifyOtp = async()=>{
+     setLoading(true)
     try {
       const result = await axios.post(`${ServerUrl}/api/auth/verify-otp`,{email,otp},
         {withCredetials:true}
       )
       console.log(result)
+      setErr('')
       setStep(3)
+      setLoading(false)
     } catch (error) {
       console.log("Error in Verifyotp",error)
+      setErr(error?.response?.data?.message)
+      setLoading(false)
     }
   } 
 
    const handleResetPassword = async()=>{
+    setLoading(true)
     if(newPassword!=confirmPassword) return null
+
     try {
       const result = await axios.post(`${ServerUrl}/api/auth/reset-password`,{email,newPassword},
         {withCredetials:true}
       )
       console.log(result)
+      setErr('')
       navigate("/signin")
+      setLoading(false)
     } catch (error) {
       console.log("Error in ResetPassword",error)
+      setErr(error?.response?.data?.message)
+      setLoading(false)
     }
   }
 
@@ -79,11 +99,17 @@ const ForgotPassword = () => {
                {/* Sign Up Button */}
             <button
              onClick={handleSendOtp}
+             disabled={loading}
               className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
               
             >
-              Send OTP
+              {
+                 loading? <ClipLoader size={20} /> : "Send OTP"
+                 }
+              {/* Send OTP */}
             </button>
+             <p className="text-red-500 text-center my-2">{err}</p>
+
             </div>
 
                 </div>
@@ -109,10 +135,15 @@ const ForgotPassword = () => {
                {/* Button */}
             <button
              onClick={handleVerifyOtp}
+             disabled={loading}
               className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
             >
-              Verify OTP
+            {
+                loading? <ClipLoader size={20} /> : "Verify OTP"
+              }
             </button>
+             <p className="text-red-500 text-center my-2">{err}</p>
+
             </div>
 
                 </div>
@@ -145,10 +176,15 @@ const ForgotPassword = () => {
                {/*  Button */}
             <button
              onClick={handleResetPassword}
-              className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
+             disabled={loading}
+             className="w-full py-3 rounded-lg bg-[#ff4d2d] text-white font-semibold hover:opacity-90 transition cursor-pointer"
             >
-              Reset Password
+              {
+               loading? <ClipLoader size={20} /> : "Reset Password"
+              }
             </button>
+             <p className="text-red-500 text-center my-2">{err}</p>
+
             </div>
                 </div>
               }

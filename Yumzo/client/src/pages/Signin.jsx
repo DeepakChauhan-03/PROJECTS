@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import axios from 'axios'
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+import {ClipLoader} from 'react-spinners'
 
 const Signin = () => {
   const primaryColor = "#ff4d2d";
@@ -14,22 +17,46 @@ const Signin = () => {
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("")
 
+  const [err,setErr] = useState('')
+  const [loading,setLoading] = useState(false)
 
   const handleSignIn = async()=>{
       if (!email || !password) {
-    alert("Please fill all fields");
-    return;
+    // alert("Please fill all fields");
+    return setErr('Please enter all fields');
   }
+  setLoading(true)
     try {
       const result = await axios.post(`${serverUrl}/api/auth/signin`,{
         email,
         password,
       },{withCredentials:true})
      console.log(result)
+     setErr("")
+     setLoading(false)
 
     } catch (error) {
       console.log("Error in Login",error)
+      setErr(error?.response?.data?.message)
+      setLoading(false)
     }
+  }
+   //googleAuth
+  const handleGoogleAuth = async ()=>{
+     
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth,provider)
+      // console.log(result) 
+      try {
+        const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`,{
+         
+          email: result.user.email,
+
+        },{withCredentials:true})
+      } catch (error) {
+        console.log("Error in handleGoogleAuth",error)
+        setErr(error?.response?.data?.message)
+      }
   }
 
 
@@ -100,15 +127,24 @@ const Signin = () => {
             {/* Sign Up Button */}
             <button
              onClick={handleSignIn}
+             disabled={loading}
               className="w-full py-3 rounded-lg text-white font-semibold hover:opacity-90 transition cursor-pointer"
               style={{ backgroundColor: primaryColor }}
             >
-              Login
+              {
+                loading? <ClipLoader size={20} /> : "Login"
+              }
+              {/* Login */}
             </button>
+
+           {
+            err && <p className="text-red-500 text-center my-2">{err}</p>
+           }
 
             {/* Google Signup */}
             <button
               type="button"
+              onClick={handleGoogleAuth}
               className="w-full flex items-center justify-center gap-3 border border-gray-300 
               rounded-lg py-3 font-medium hover:bg-gray-100 transition cursor-pointer my-3"
             >

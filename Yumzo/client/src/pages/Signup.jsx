@@ -6,6 +6,7 @@ import axios from 'axios'
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
+import {ClipLoader} from 'react-spinners'
 
 const Signup = () => {
   const primaryColor = "#ff4d2d";
@@ -18,7 +19,14 @@ const Signup = () => {
   const [password,setPassword] = useState("")
   const [mobile,setMobile] = useState("")
 
+  const [err,setErr] = useState(" ")
+  const [loading,setLoading] = useState(false)
+
   const handleSignUp = async()=>{
+    if(!password || !mobile || !email || !fullName){
+      return alert("Enter your Credentials")
+    }
+    setLoading(true)
     try {
       const result = await axios.post(`${serverUrl}/api/auth/signup`,{
         fullName,
@@ -28,17 +36,36 @@ const Signup = () => {
         role
       },{withCredentials:true})
      console.log(result)
+     setErr("")
+     setLoading(false)
 
     } catch (error) {
       console.log("Error in handlesignup",error)
+      setErr(error.response.data.message)
+      setLoading(false)
     }
   }
 
   //googleAuth
   const handleGoogleAuth = async ()=>{
+      if(!mobile){
+        return setErr('Mobile number is required')
+      }
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth,provider)
-      console.log(result)
+      // console.log(result)
+      try {
+        const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`,{
+          fullName: result.user.displayName,
+          email: result.user.email,
+          role,
+          mobile,
+
+        },{withCredentials:true})
+      } catch (error) {
+        console.log("Error in handleGoogleAuth",error)
+        setErr(error.response.data.message)
+      }
   }
 
   return (
@@ -150,11 +177,19 @@ const Signup = () => {
             {/* Sign Up Button */}
             <button
              onClick={handleSignUp}
+             disabled = {loading}
               className="w-full py-3 rounded-lg text-white font-semibold hover:opacity-90 transition cursor-pointer"
               style={{ backgroundColor: primaryColor }}
             >
-              Sign Up
+              {
+                loading? <ClipLoader size={20} /> : "Sign Up"
+              }
+              {/* Sign Up */}
             </button>
+
+            {
+              err && <p className="text-red-500 text-center my-2">{err}</p>
+            }
 
             {/* Google Signup */}
             <button
