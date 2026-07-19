@@ -59,9 +59,10 @@ const Signup = () => {
           fullName: result.user.displayName,
           email: result.user.email,
           role,
-          mobile,
+          mobile
 
         },{withCredentials:true})
+        setErr('')
       } catch (error) {
         console.log("Error in handleGoogleAuth",error)
         setErr(error.response.data.message)

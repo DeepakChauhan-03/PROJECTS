@@ -53,6 +53,7 @@ const Signin = () => {
           email: result.user.email,
 
         },{withCredentials:true})
+        // console.log(data)
       } catch (error) {
         console.log("Error in handleGoogleAuth",error)
         setErr(error?.response?.data?.message)

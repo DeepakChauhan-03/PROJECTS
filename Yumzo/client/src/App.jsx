@@ -4,10 +4,12 @@ import Signup from './pages/Signup'
 import Signin from './pages/Signin'
 import PageNotFound from './pages/PageNotFound'
 import ForgotPassword from './pages/ForgotPassword'
+import useGetCurrentUser from './hooks/useGetCurrentUser'
 
 export const serverUrl = "http://localhost:8000"
 
 const App = () => {
+  useGetCurrentUser()
   return (
     <div>
       <Routes>

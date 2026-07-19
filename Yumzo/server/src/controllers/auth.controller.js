@@ -192,6 +192,9 @@ export const googleAuth = async (req,res)=>{
             mobile,
             role
         })
+        // return res.status(201).json({
+        //     message:"User create successfully"
+        // })
      }
 
      const token = await genToken(user._id);
