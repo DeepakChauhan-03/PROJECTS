@@ -7,6 +7,8 @@ import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import {ClipLoader} from 'react-spinners'
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const Signup = () => {
   const primaryColor = "#ff4d2d";
@@ -22,6 +24,8 @@ const Signup = () => {
   const [err,setErr] = useState(" ")
   const [loading,setLoading] = useState(false)
 
+  const dispatch = useDispatch()
+
   const handleSignUp = async()=>{
     if(!password || !mobile || !email || !fullName){
       return alert("Enter your Credentials")
@@ -36,6 +40,7 @@ const Signup = () => {
         role
       },{withCredentials:true})
      console.log(result)
+      dispatch(setUserData(result.data.user))  //redux
      setErr("")
      setLoading(false)
 
@@ -62,6 +67,7 @@ const Signup = () => {
           mobile
 
         },{withCredentials:true})
+        dispatch(setUserData(data))  //redux
         setErr('')
       } catch (error) {
         console.log("Error in handleGoogleAuth",error)

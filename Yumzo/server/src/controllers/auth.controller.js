@@ -44,7 +44,8 @@ export const signUp = async(req,res)=>{
        })
 
        return res.status(201).json({
-        message:"User created successfully"
+        message:"User created successfully",
+        user
        })
 
 
@@ -80,7 +81,8 @@ export const signIn = async(req,res) => {
        })
 
        return res.status(200).json({
-        message:"User login successfully"
+        message:"User login successfully",
+        user
        })
 
 
@@ -171,7 +173,8 @@ export const resetPassword = async (req,res)=>{
         user.isOtpVerified = false;
         await user.save();
         return res.status(200).json({
-            message:"Password reset successfully"
+            message:"Password reset successfully",
+            user
         })
 
 
