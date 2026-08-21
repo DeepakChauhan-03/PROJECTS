@@ -8,8 +8,9 @@ import Employees from './pages/Employees'
 import Attendence from './pages/Attendence'
 import Leave from './pages/Leave'
 import PaySlips from './pages/PaySlips'
-import { Settings } from 'lucide-react'
+import Settings  from './pages/Settings'
 import PrintPayslips from './pages/PrintPayslips'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   return (
@@ -18,6 +19,12 @@ const App = () => {
       <Routes>
 
         <Route path='/login' element={<LoginLanding />} />
+
+        <Route path='/login/admin' element={<LoginForm role="admin" 
+        title="Admin Portal" subtitle="Sign in to manage the Organization" />} />
+
+        <Route path='/login/employee' element={<LoginForm role="employee" 
+        title="Employee Portal" subtitle="Sign in to access your account" />} />
 
         <Route element={<Layout/>}>
             <Route path='/dashboard' element={<Dashboard/>}/>
