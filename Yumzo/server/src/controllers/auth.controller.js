@@ -100,6 +100,21 @@ export const signIn = async(req,res)=>{
     }
 }
 
+//Logout controller
+export  const signOut = async(params)=>{
+    try {
+        res.clearCookie("token");
+        return res.status(200).json({
+            message:"Logout seccessfully"
+        })
+    } catch (error) {
+        console.log("Error in logout conteroller", error);
+        return res.status(500).json({
+            message:"Error is signout controller"
+        });
+    }
+}
+
 
 
 
