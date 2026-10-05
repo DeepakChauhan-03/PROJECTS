@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { FaRegEyeSlash } from "react-icons/fa"
+import { FaRegEye } from "react-icons/fa";
 
 const SignUp = () => {
   const primaryColor = "#ff4d2d";
   const hoverColor = "#e64323";
   const bgColor = "#fff9f6";
   const borderColor = "#ddd";
+
+  const [showPassword,setShowPassword] = useState(false);
+  const [role,setRole] = useState("user");
 
   return (
     <div className='min-h-screen w-full flex items-center justify-center p-4' 
@@ -32,16 +37,32 @@ const SignUp = () => {
 
         {/* mobile */}
         <div mb-4>
-          <label htmlFor="fullName" className='block text-gray-700 font-medium mb-1'
+          <label htmlFor="mobile" className='block text-gray-700 font-medium mb-1'
           >Mobile</label>
           <input type="text" className='w-full rounded-lg px-3 py-2 focus:outline-none
           focus:border-orange-500' placeholder="Enter your Mobile no." style={{border:`1px solid ${borderColor}`}} />
         </div>
+       
+       {/* password */}
+       <div mb-4>
+          <label htmlFor="password" className='block text-gray-700 font-medium mb-1'
+          >Password</label>
+          <div className='relative'>
+            <input type={`${showPassword?"text":"password"}`} className='w-full rounded-lg px-3 py-2 focus:outline-none
+          focus:border-orange-500' placeholder="Enter your password" style={{border:`1px solid ${borderColor}`}} />
+         
+          <button
+          onClick={()=>setShowPassword(prev=>!prev)}
+           className='absolute cursor-pointer right-3 top-[14px] text-gray-500'>{!showPassword? 
+          <FaRegEye />:<FaRegEyeSlash />}</button>
+           </div>
+        </div>
 
+        {/* Role */}
         
 
-    </div>
-      
+
+    </div>    
       
     </div>
   )
