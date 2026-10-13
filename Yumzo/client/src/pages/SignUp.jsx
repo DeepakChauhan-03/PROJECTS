@@ -77,8 +77,9 @@ const SignUp = () => {
           </div>
 
         </div>
-
-
+           <button className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-orange-600 hover:bg-[#e64323]' >
+               Sign Up
+             </button>
     </div>    
       
     </div>
