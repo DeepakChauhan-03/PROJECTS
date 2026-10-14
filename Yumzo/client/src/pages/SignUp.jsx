@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { FaRegEyeSlash } from "react-icons/fa"
 import { FaRegEye } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
+import { serverUrl } from '../App';
 
 const SignUp = () => {
   const primaryColor = "#ff4d2d";
@@ -8,8 +12,27 @@ const SignUp = () => {
   const bgColor = "#fff9f6";
   const borderColor = "#ddd";
 
+  const navigate = useNavigate();
+
   const [showPassword,setShowPassword] = useState(false);
   const [role,setRole] = useState("user");
+
+  const [fullName,setFullName] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
+  const [mobile,setMobile] = useState("");
+
+  //Api handling
+  const handleSignUp = async()=>{
+      try {
+        const result = await axios.post(`${serverUrl}/api/auth/signup`,{
+          fullName,email,password,mobile,role},{withCredentials:true});
+          console.log(result);
+
+      } catch (error) {
+        console.log("Error in HandleSignup ", error)
+      }
+  }
 
   return (
     <div className='min-h-screen w-full flex items-center justify-center p-4' 
@@ -23,7 +46,10 @@ const SignUp = () => {
         <div mb-4>
           <label htmlFor="fullName" className='block text-gray-700 font-medium mb-1'
           >Full Name</label>
-          <input type="text" className='w-full rounded-lg px-3 py-2 focus:outline-none
+          <input type="text"
+          value={fullName}
+          onChange={(e)=>setFullName(e.target.value)}
+          className='w-full rounded-lg px-3 py-2 focus:outline-none
           focus:border-orange-500' placeholder="Enter your full Name" style={{border:`1px solid ${borderColor}`}} />
         </div>
 
@@ -31,7 +57,10 @@ const SignUp = () => {
         <div mb-4>
           <label htmlFor="email" className='block text-gray-700 font-medium mb-1'
           >E-mail</label>
-          <input type="text" className='w-full rounded-lg px-3 py-2 focus:outline-none
+          <input type="text"
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
+          className='w-full rounded-lg px-3 py-2 focus:outline-none
           focus:border-orange-500' placeholder="Enter your e-mail" style={{border:`1px solid ${borderColor}`}} />
         </div>
 
@@ -39,7 +68,10 @@ const SignUp = () => {
         <div mb-4>
           <label htmlFor="mobile" className='block text-gray-700 font-medium mb-1'
           >Mobile</label>
-          <input type="text" className='w-full rounded-lg px-3 py-2 focus:outline-none
+          <input type="text"
+          value={mobile}
+          onChange={(e)=>setEmail(e.target.value)}
+          className='w-full rounded-lg px-3 py-2 focus:outline-none
           focus:border-orange-500' placeholder="Enter your Mobile no." style={{border:`1px solid ${borderColor}`}} />
         </div>
        
@@ -48,7 +80,10 @@ const SignUp = () => {
           <label htmlFor="password" className='block text-gray-700 font-medium mb-1'
           >Password</label>
           <div className='relative'>
-            <input type={`${showPassword?"text":"password"}`} className='w-full rounded-lg px-3 py-2 focus:outline-none
+            <input type={`${showPassword?"text":"password"}`}
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
+            className='w-full rounded-lg px-3 py-2 focus:outline-none
           focus:border-orange-500' placeholder="Enter your password" style={{border:`1px solid ${borderColor}`}} />
          
           <button
@@ -77,15 +112,17 @@ const SignUp = () => {
           </div>
 
         </div>
-           <button className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-orange-600 hover:bg-[#e64323]' >
+           <button className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-[#ff4d2d] hover:bg-[#e64323]' >
                Sign Up
              </button>
 
-             //google button
-             <button className=''>
-                 
+             {/* //google button */}
+             <button className='w-full cursor-pointer mt-4 flex item-center justify-center gap-2 border rounded-lg px-4 py-2 
+             transition duration-200 border-gray-400 hover:bg-gray-200'>
+                 <FcGoogle size={20} />
                  <span>Sign up with Google</span>
              </button>
+             <p className='text-center mt-2'>Already have an account? <span className='text-[#ff4d2d] cursor-pointer'onClick={()=>navigate('/signin')} >Sign In</span></p>
     </div>    
       
     </div>
