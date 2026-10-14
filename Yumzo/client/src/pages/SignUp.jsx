@@ -80,6 +80,12 @@ const SignUp = () => {
            <button className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-orange-600 hover:bg-[#e64323]' >
                Sign Up
              </button>
+
+             //google button
+             <button className=''>
+                 
+                 <span>Sign up with Google</span>
+             </button>
     </div>    
       
     </div>
