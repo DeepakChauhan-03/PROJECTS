@@ -1,5 +1,6 @@
 import userModel from "../models/user.model.js";
 import bcrypt from 'bcryptjs'
+import genToken from '../utils/token.js'
 
 
 
@@ -7,7 +8,7 @@ import bcrypt from 'bcryptjs'
 export const signUp = async(req,res)=>{
     try {
         const {fullName, email,password,mobile,role} = req.body;
-        const user = await userModel.findOne({email});
+        let user = await userModel.findOne({email});
         if(user){
             return res.status(400).json({
                 message:"User already exist"
@@ -28,7 +29,7 @@ export const signUp = async(req,res)=>{
 
       //user created
         user = await userModel.create({
-            fullname,
+            fullName,
             email,
             role,
             mobile,
@@ -101,7 +102,7 @@ export const signIn = async(req,res)=>{
 }
 
 //Logout controller
-export  const signOut = async(params)=>{
+export  const signOut = async(req,res)=>{
     try {
         res.clearCookie("token");
         return res.status(200).json({

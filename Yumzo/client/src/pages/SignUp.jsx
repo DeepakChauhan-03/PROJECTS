@@ -30,7 +30,7 @@ const SignUp = () => {
           console.log(result);
 
       } catch (error) {
-        console.log("Error in HandleSignup ", error)
+        console.log("Error in HandleSignup ",  error.response?.data || error.message)
       }
   }
 
@@ -70,7 +70,7 @@ const SignUp = () => {
           >Mobile</label>
           <input type="text"
           value={mobile}
-          onChange={(e)=>setEmail(e.target.value)}
+          onChange={(e)=>setMobile(e.target.value)}
           className='w-full rounded-lg px-3 py-2 focus:outline-none
           focus:border-orange-500' placeholder="Enter your Mobile no." style={{border:`1px solid ${borderColor}`}} />
         </div>
@@ -87,6 +87,7 @@ const SignUp = () => {
           focus:border-orange-500' placeholder="Enter your password" style={{border:`1px solid ${borderColor}`}} />
          
           <button
+          type='button'
           onClick={()=>setShowPassword(prev=>!prev)}
            className='absolute cursor-pointer right-3 top-[14px] text-gray-500'>{!showPassword? 
           <FaRegEye />:<FaRegEyeSlash />}</button>
@@ -112,7 +113,9 @@ const SignUp = () => {
           </div>
 
         </div>
-           <button className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-[#ff4d2d] hover:bg-[#e64323]' >
+           <button
+           onClick={handleSignUp}
+           className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-[#ff4d2d] hover:bg-[#e64323]' >
                Sign Up
              </button>
 
