@@ -70,11 +70,18 @@ const SignIn = () => {
            </div>
         </div>
 
+        {/* Forgot password */}
+        <div 
+        onClick={()=>navigate("/forgot-password")}
+        className='text-right mb-3 text-[#ff4d2d] font-medium'>
+          Forgot Password
+        </div>
+
     
            <button
            onClick={handleSignIn}
            className='w-full font-semibold border rounded-lg py-2 transition cursor-pointer duration-200 text-white bg-[#ff4d2d] hover:bg-[#e64323]' >
-               Sign Up
+               Login
              </button>
 
              {/* //google button */}
