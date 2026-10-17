@@ -73,7 +73,7 @@ const SignIn = () => {
         {/* Forgot password */}
         <div 
         onClick={()=>navigate("/forgot-password")}
-        className='text-right mb-3 text-[#ff4d2d] font-medium'>
+        className='text-right mb-3 cursor-pointer text-[#ff4d2d] font-medium'>
           Forgot Password
         </div>
 
