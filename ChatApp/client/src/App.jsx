@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PaySlips = () => {
+const App = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const PaySlips = () => {
   )
 }
 
-export default PaySlips
+export default App
